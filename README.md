@@ -1,73 +1,88 @@
-## Eleventy Plugin Template
+# eleventy-plugin-codepen
+> Embed CodePen.io Pens into your eleventy website
 
-> A starter environment for creating plugins for Eleventy (11ty).
-
-Fork this repo, or select "Use this template" to get started.
-
-### Using this template
-
-This template is setup to run a single page 11ty site for testing your plugin functionality. The build files are excluded from the final plugin package via `.npmignore`.
-
-Your plugin functionality should live in/be exported from `.eleventy.js`. You will find a sample of creating a filter plugin in this template, including setting up a default config and merging user options.
-
-**Be sure to update the `package.json` with your own details!**
-
-### Testing your plugin
-
-You can test your functionality within this project's local 11ty build by running `npm start`, but you'll also want to test it _as a plugin_.
-
-From another local 11ty project, you can set the `require()` path relatively to your plugin's project directory, and then use it just as you would for a plugin coming from a package.
-
-Example, assuming you place all your repositories within the same parent directory:
-
-```js
-const pluginName = require("../plugin-directory");
-
-module.exports = (eleventyConfig) => {
-  eleventyConfig.addPlugin(pluginName, { optionName: 'if needed' );
-};
-```
-
-Then, run the project to test the plugin's functionality.
-
-Note that making changes in the plugin source will likely require restarting the test project.
-
-### Resources for creating an 11ty plugin
-
-- Bryan Robinson's ["Create a Plugin with 11ty"](https://www.youtube.com/watch?v=aO-NFFKjnnE) demonstration on "Learn With Jason"
-
----
-
-**The following is a boilerplate for your final plugin README**.
+<!-- BEGIN mktoc -->
+- [Usage](#usage)
+  - [Install via npm](#install-via-npm)
+  - [Load the plugin in .eleventy.js](#load-the-plugin-in-eleventyjs)
+  - [Load the CodePen javascript library](#load-the-codepen-javascript-library)
+  - [Use the shortcode!](#use-the-shortcode)
+- [Config Options](#config-options)
+  - [Overwriting options inline](#overwriting-options-inline)
+- [Credits](#credits)
+<!-- END mktoc -->
 
 ## Usage
 
-Describe how to install your plugin, such as:
+### Install via npm
+
 
 ```bash
-npm install @scope/plugin-name
+npm install @kevingimbel/eleventy-plugin-codepen --save
 ```
 
-Then, include it in your `.eleventy.js` config file:
+### Load the plugin in .eleventy.js
 
+Include it in your .eleventy.js config file:
 ```js
-const pluginName = require("@scope/plugin-name");
+const canIuse = require("@kevingimbel/eleventy-plugin-caniuse");
 
 module.exports = (eleventyConfig) => {
-  eleventyConfig.addPlugin(pluginName);
+  eleventyConfig.addPlugin(canIuse);
 };
+```
+
+### Load the CodePen javascript library
+
+The embed requires the CodePen JavaScript library to work. For convenience the library can be loaded with a shortcode. This is best done near the closing body tag and only needs to be done once!
+
+```html
+...
+{% codepen_js %}
+</body>
+</html>
+```
+
+### Use the shortcode!
+
+The only required arguments is the CodePen full URL of the Pen or the "slug". This is the random letters in the URL, for example the Pen https://codepen.io/kevingimbel/pen/LXxoEL has the slug "LXxoEL".
+
+It is up to you what you want to specify, although the full URL may be more future proof (e.g. if you want to replace this Plugin with a plugin that prints the URL instead of creating an embed.).
+
+```
+{% codepen "https://codepen.io/kevingimbel/pen/LXxoEL" %}
 ```
 
 ## Config Options
 
-| Option      | Type | Default       |
-| ----------- | ---- | ------------- |
-| option name | type | default value |
+All of these can be set in the `.eleventy.js` config as well as inline (see below).
 
-## Config Examples
+| Option      | Type | Default       | Comment | 
+| ----------- | ---- | ------------- | ------- | 
+| height | Number | 256 | The height of the embed iframe | 
+| theme | String | dark | Free codepen users can use `light` or `dark`, CodePen Pro users may use additional themes | 
+| tabs | String | result | possible values: `html`, `css`, `js`, `result`. Combine with comma like `html,result` |
+| user | String | Captain Anonymous | name of the user who created the pen |
+| title | String | Unknown Pen | The title of the pen, used when embed can't be rendered |
+| preview | Boolean | true | If true, shows a "run pen" button instead of automatically running code |
+| editable | Boolean | false | Makes pen editable, requires CodePen Pro |
 
-Show examples of likely configurations.
+### Overwriting options inline
+
+All options can also be overwritten "inline" when the shortcode is used. Because 11ty doesn't support names parameters, and there are quite a lot of options, all options are specified in one string. 
+
+The config string is split at each semicolon (`;`) and each colon (`:`) to create key-value pairs, as shown in the following table
+
+| Option String | Parsed object |
+| ------------- | ------------- |
+|`tabs:html,result;title:single-div Link from Legend of Zelda`| `{tabs: "html,result", title: "single-div Link from Legend of Zelda" }` |
+
+Setting all options looks like:
+
+```
+"height:256;theme:dark;tabs:result;user:Captain Anonymous;title:Unknown Pen;preview: true;editable: false"
+```
 
 ## Credits
 
-Add credits if needed.
+- Huge thanks to [CodePen.io](https://codepen.io/) for providing a great embed script. This plugin is only a wrapper around the existing functionality.
