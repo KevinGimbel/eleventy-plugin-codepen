@@ -1,6 +1,6 @@
 {
   "name": "@kevingimbel/eleventy-plugin-codepen",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Embed CodePen pens into eleventy sites",
   "homepage": "https://github.com/KevinGimbel/eleventy-plugin-codepen",
   "main": ".eleventy.js",
