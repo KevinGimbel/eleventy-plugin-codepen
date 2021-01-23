@@ -25,10 +25,10 @@ npm install @kevingimbel/eleventy-plugin-codepen --save
 
 Include it in your .eleventy.js config file:
 ```js
-const canIuse = require("@kevingimbel/eleventy-plugin-caniuse");
+const codepenEmbed = require("@kevingimbel/eleventy-plugin-codepen");
 
 module.exports = (eleventyConfig) => {
-  eleventyConfig.addPlugin(canIuse);
+  eleventyConfig.addPlugin(codepenEmbed);
 };
 ```
 
